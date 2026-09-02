@@ -1,0 +1,31 @@
+[project]
+name = "email-agent"
+version = "0.1.0"
+description = "AI agent quan ly email, xay tren LangGraph ReAct + Claude"
+requires-python = ">=3.12"
+dependencies = [
+    "langgraph>=0.2.50",
+    "langchain-anthropic>=0.3.0",
+    "langchain-core>=0.3.0",
+    "google-api-python-client>=2.150.0",
+    "google-auth-oauthlib>=1.2.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+email-agent = "email_agent.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

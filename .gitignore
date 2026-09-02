@@ -1,0 +1,13 @@
+# Secrets - KHONG BAO GIO commit
+.env
+credentials.json
+token.json
+*.sqlite
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/

@@ -2,24 +2,20 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 
 from email_agent.agent.graph import build_model
-from email_agent.config import DEFAULT_MODELS, Settings
+from email_agent.config import DEFAULT_MODELS, ModelSettings
 
 
-def settings_for(provider: str) -> Settings:
-    return Settings(
+def settings_for(provider: str) -> ModelSettings:
+    return ModelSettings(
         provider=provider,  # type: ignore[arg-type]
         api_key="test-key",
         model=DEFAULT_MODELS[provider],  # type: ignore[index]
-        credentials_file=Path("credentials.json"),
-        token_file=Path("token.json"),
     )
 
 

@@ -14,13 +14,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from email_agent.config import load_settings  # noqa: E402
+from email_agent.config import load_gmail_settings  # noqa: E402
 from email_agent.email_client.gmail import GmailClient  # noqa: E402
 
 
 def main() -> int:
     query = sys.argv[1] if len(sys.argv) > 1 else "in:inbox"
-    settings = load_settings()
+    settings = load_gmail_settings()
     client = GmailClient(settings.credentials_file, settings.token_file)
 
     print(f"Hop thu: {client.profile_email()}")

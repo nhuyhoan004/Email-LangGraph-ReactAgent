@@ -10,7 +10,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 
 from .agent.graph import build_agent
-from .config import load_settings
+from .config import load_gmail_settings, load_model_settings
 from .email_client.gmail import GmailClient
 
 console = Console()
@@ -50,15 +50,19 @@ def _run_turn(agent, question: str, config: dict) -> None:
 
 def main() -> int:
     try:
-        settings = load_settings()
+        model_settings = load_model_settings()
     except RuntimeError as exc:
         console.print(f"[red]{exc}[/red]")
         return 1
 
+    gmail_settings = load_gmail_settings()
     console.print("[dim]Dang ket noi Gmail...[/dim]")
     try:
-        client = GmailClient(settings.credentials_file, settings.token_file)
-        agent, user_email = build_agent(settings, client)
+        client = GmailClient(
+            gmail_settings.credentials_file,
+            gmail_settings.token_file,
+        )
+        agent, user_email = build_agent(model_settings, client)
     except FileNotFoundError as exc:
         console.print(f"[red]{exc}[/red]")
         return 1
@@ -66,8 +70,8 @@ def main() -> int:
     console.print(
         Panel(
             f"Hop thu: [bold]{user_email}[/bold]\n"
-            f"Provider: [bold]{settings.provider}[/bold]\n"
-            f"Model: [bold]{settings.model}[/bold]\n"
+            f"Provider: [bold]{model_settings.provider}[/bold]\n"
+            f"Model: [bold]{model_settings.model}[/bold]\n"
             "Che do: [bold]chi doc[/bold] - agent khong the sua hop thu\n\n"
             "Thu hoi: 'hom nay co mail nao can tra loi gap khong?'\n"
             "Go 'thoat' de ket thuc.",

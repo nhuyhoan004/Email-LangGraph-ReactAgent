@@ -39,15 +39,20 @@ PROVIDER_API_KEYS: dict[Provider, str] = {
 
 
 @dataclass(frozen=True)
-class Settings:
+class ModelSettings:
     provider: Provider
     api_key: str
     model: str
+
+
+@dataclass(frozen=True)
+class GmailSettings:
     credentials_file: Path
     token_file: Path
 
 
-def load_settings() -> Settings:
+def load_model_settings() -> ModelSettings:
+    """Doc cau hinh LLM va kiem tra API key cua provider da chon."""
     raw_provider = os.getenv("EMAIL_AGENT_PROVIDER", "claude").strip().lower()
     if raw_provider not in DEFAULT_MODELS:
         supported = ", ".join(DEFAULT_MODELS)
@@ -65,10 +70,16 @@ def load_settings() -> Settings:
             "Copy .env.example thanh .env va dien key vao."
         )
 
-    return Settings(
+    return ModelSettings(
         provider=provider,
         api_key=api_key,
         model=os.getenv("EMAIL_AGENT_MODEL", "").strip() or DEFAULT_MODELS[provider],
+    )
+
+
+def load_gmail_settings() -> GmailSettings:
+    """Doc duong dan OAuth Gmail; khong phu thuoc provider hay API key LLM."""
+    return GmailSettings(
         credentials_file=Path(os.getenv("GOOGLE_CREDENTIALS_FILE", "credentials.json")),
         token_file=Path(os.getenv("GOOGLE_TOKEN_FILE", "token.json")),
     )

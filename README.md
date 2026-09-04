@@ -57,6 +57,9 @@ Bien API key tuong ung la `OPENAI_API_KEY`, `OPENROUTER_API_KEY`,
 `GOOGLE_API_KEY`, hoac `ANTHROPIC_API_KEY`. Model mac dinh lan luot la
 `gpt-4o-mini`, `openai/gpt-4o-mini`, `gemini-2.0-flash`, va `claude-opus-5`.
 
+Cau hinh Gmail (`GOOGLE_CREDENTIALS_FILE`, `GOOGLE_TOKEN_FILE`) doc lap voi
+cau hinh LLM. Vi vay script `check_inbox.py` khong can provider hay API key AI.
+
 ## Su dung
 
 Buoc 1 - kiem tra ket noi Gmail, khong dung AI:

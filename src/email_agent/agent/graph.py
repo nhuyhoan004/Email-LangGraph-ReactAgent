@@ -9,13 +9,13 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
-from ..config import Settings
+from ..config import ModelSettings
 from ..email_client.gmail import GmailClient
 from .prompts import SYSTEM_PROMPT
 from .tools import build_tools
 
 
-def build_model(settings: Settings) -> BaseChatModel:
+def build_model(settings: ModelSettings) -> BaseChatModel:
     """Khoi tao chat model tu provider da chon trong .env."""
     if settings.provider == "claude":
         return ChatAnthropic(
@@ -48,7 +48,7 @@ def build_model(settings: Settings) -> BaseChatModel:
     )
 
 
-def build_agent(settings: Settings, client: GmailClient):
+def build_agent(settings: ModelSettings, client: GmailClient):
     """Tra ve (graph da compile, dia chi email cua user)."""
     user_email = client.profile_email()
     return (

@@ -1,7 +1,7 @@
 # Email-LangGraph-ReactAgent
 
-AI agent quan ly email, xay tren LangGraph ReAct agent + Claude (`claude-opus-5`)
-va Gmail API.
+AI agent quan ly email, xay tren LangGraph ReAct agent, ho tro OpenAI,
+OpenRouter, Google Gemini, Anthropic Claude va Gmail API.
 
 Trang thai hien tai: **Phase 2 - agent chi doc, giao dien CLI**.
 
@@ -10,7 +10,7 @@ Trang thai hien tai: **Phase 2 - agent chi doc, giao dien CLI**.
 ```
 CLI (cli.py)
    |
-LangGraph ReAct agent (agent/graph.py)  -->  ChatAnthropic
+LangGraph ReAct agent (agent/graph.py)  -->  OpenAI / OpenRouter / Gemini / Claude
    |
 Tools (agent/tools.py)
    |
@@ -40,8 +40,22 @@ pip install -e ".[dev]"
 ### Bien moi truong
 
 ```bash
-cp .env.example .env      # roi dien ANTHROPIC_API_KEY
+cp .env.example .env
 ```
+
+Chon provider va dien API key tuong ung trong `.env`:
+
+```dotenv
+EMAIL_AGENT_PROVIDER=openai  # openai | openrouter | google | claude
+OPENAI_API_KEY=sk-...
+
+# De trong de dung model mac dinh theo provider.
+EMAIL_AGENT_MODEL=
+```
+
+Bien API key tuong ung la `OPENAI_API_KEY`, `OPENROUTER_API_KEY`,
+`GOOGLE_API_KEY`, hoac `ANTHROPIC_API_KEY`. Model mac dinh lan luot la
+`gpt-4o-mini`, `openai/gpt-4o-mini`, `gemini-2.0-flash`, va `claude-opus-5`.
 
 ## Su dung
 

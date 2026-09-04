@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from langchain_anthropic import ChatAnthropic
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
@@ -12,14 +15,36 @@ from .prompts import SYSTEM_PROMPT
 from .tools import build_tools
 
 
-def build_model(settings: Settings) -> ChatAnthropic:
-    return ChatAnthropic(
+def build_model(settings: Settings) -> BaseChatModel:
+    """Khoi tao chat model tu provider da chon trong .env."""
+    if settings.provider == "claude":
+        return ChatAnthropic(
+            model=settings.model,
+            api_key=settings.api_key,
+            max_tokens=16_000,
+            # Adaptive thinking chi la tham so cua Claude.
+            thinking={"type": "adaptive"},
+        )
+
+    if settings.provider == "google":
+        return ChatGoogleGenerativeAI(
+            model=settings.model,
+            google_api_key=settings.api_key,
+            max_output_tokens=16_000,
+        )
+
+    if settings.provider == "openrouter":
+        return ChatOpenAI(
+            model=settings.model,
+            api_key=settings.api_key,
+            base_url="https://openrouter.ai/api/v1",
+            max_tokens=16_000,
+        )
+
+    return ChatOpenAI(
         model=settings.model,
-        api_key=settings.anthropic_api_key,
+        api_key=settings.api_key,
         max_tokens=16_000,
-        # Adaptive thinking: model tu quyet dinh suy nghi bao lau. Tren Claude
-        # 4.6 tro len khong dung budget_tokens nua.
-        thinking={"type": "adaptive"},
     )
 
 

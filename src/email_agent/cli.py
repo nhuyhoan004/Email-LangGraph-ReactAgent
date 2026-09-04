@@ -66,6 +66,7 @@ def main() -> int:
     console.print(
         Panel(
             f"Hop thu: [bold]{user_email}[/bold]\n"
+            f"Provider: [bold]{settings.provider}[/bold]\n"
             f"Model: [bold]{settings.model}[/bold]\n"
             "Che do: [bold]chi doc[/bold] - agent khong the sua hop thu\n\n"
             "Thu hoi: 'hom nay co mail nao can tra loi gap khong?'\n"

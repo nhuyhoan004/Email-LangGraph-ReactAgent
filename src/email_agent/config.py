@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal, cast
 
 from dotenv import load_dotenv
 
@@ -20,24 +21,54 @@ MAX_BODY_CHARS = 4000
 # Tran so email tra ve moi lan search, chan viec agent keo ca inbox vao context.
 MAX_SEARCH_RESULTS = 25
 
+Provider = Literal["openai", "openrouter", "google", "claude"]
+
+DEFAULT_MODELS: dict[Provider, str] = {
+    "openai": "gpt-4o-mini",
+    "openrouter": "openai/gpt-4o-mini",
+    "google": "gemini-2.0-flash",
+    "claude": "claude-opus-5",
+}
+
+PROVIDER_API_KEYS: dict[Provider, str] = {
+    "openai": "OPENAI_API_KEY",
+    "openrouter": "OPENROUTER_API_KEY",
+    "google": "GOOGLE_API_KEY",
+    "claude": "ANTHROPIC_API_KEY",
+}
+
 
 @dataclass(frozen=True)
 class Settings:
-    anthropic_api_key: str
+    provider: Provider
+    api_key: str
     model: str
     credentials_file: Path
     token_file: Path
 
 
 def load_settings() -> Settings:
-    api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    raw_provider = os.getenv("EMAIL_AGENT_PROVIDER", "claude").strip().lower()
+    if raw_provider not in DEFAULT_MODELS:
+        supported = ", ".join(DEFAULT_MODELS)
+        raise RuntimeError(
+            f"EMAIL_AGENT_PROVIDER='{raw_provider}' khong hop le. "
+            f"Cac gia tri ho tro: {supported}."
+        )
+
+    provider = cast(Provider, raw_provider)
+    key_name = PROVIDER_API_KEYS[provider]
+    api_key = os.getenv(key_name, "").strip()
     if not api_key:
         raise RuntimeError(
-            "Thieu ANTHROPIC_API_KEY. Copy .env.example thanh .env va dien key vao."
+            f"Thieu {key_name} cho provider '{provider}'. "
+            "Copy .env.example thanh .env va dien key vao."
         )
+
     return Settings(
-        anthropic_api_key=api_key,
-        model=os.getenv("EMAIL_AGENT_MODEL", "claude-opus-5"),
+        provider=provider,
+        api_key=api_key,
+        model=os.getenv("EMAIL_AGENT_MODEL", "").strip() or DEFAULT_MODELS[provider],
         credentials_file=Path(os.getenv("GOOGLE_CREDENTIALS_FILE", "credentials.json")),
         token_file=Path(os.getenv("GOOGLE_TOKEN_FILE", "token.json")),
     )

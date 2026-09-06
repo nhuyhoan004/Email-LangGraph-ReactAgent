@@ -1,7 +1,6 @@
 # Email-LangGraph-ReactAgent
 
-AI agent quan ly email, xay tren LangGraph ReAct agent, ho tro OpenAI,
-OpenRouter, Google Gemini, Anthropic Claude va Gmail API.
+AI agent quản lý email, xay tren LangGraph ReAct agent.
 
 Trang thai hien tai: **Phase 2 - agent chi doc, giao dien CLI**.
 
